@@ -127,7 +127,7 @@ int main(int argc, char const *argv[])
 	window.level.resize(window.Width*window.Height, false);
 
 	// // random generation
-	// generate_units(WindowWidth*WindowHeight/3, level);
+	// generate_units(WindowWidth*WindowHeight/3, window);
 
 	// setting patterns 
 	{
