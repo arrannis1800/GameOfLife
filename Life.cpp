@@ -4,30 +4,12 @@
 #include <unistd.h>
 #include <vector>
 
+#include "structs.h"
+#include "patterns.h"
+
 #define WindowHeight 20
 #define WindowWidth  50
 static size_t frame = 0;
-
-
-struct Window
-{
-	std::vector<bool> level;
-	size_t Height;
-	size_t Width;
-};
-
-enum EDirecton{
-	upper_left = 0, // 00
-	upper_right = 1, // 01
-	down_left = 2, // 10
-	down_right = 3, // 11
-};
-
-enum Eposition{
-	horisontal = 1, // 01
-	vertical = 2, // 10
-};
-
 
 void generate_units(size_t num, Window &window)
 {
@@ -94,28 +76,6 @@ std::vector<bool> calc_next_state(Window &window)
 	
 
 	return temp;
-}
-
-void set_glider(Window &window, size_t x, size_t y, EDirecton direction)
-{
-	int x_direction = (direction & ( 1 << 0 )) >> 0 ? 1 : -1;
-	int y_direction = (direction & ( 1 << 1 )) >> 1 ? 1 : -1;
-
-	window.level[(x+1*x_direction) + (y+0*y_direction)*window.Width] = true;
-	window.level[(x+2*x_direction) + (y+1*y_direction)*window.Width] = true;
-	window.level[(x+0*x_direction) + (y+2*y_direction)*window.Width] = true;
-	window.level[(x+1*x_direction) + (y+2*y_direction)*window.Width] = true;
-	window.level[(x+2*x_direction) + (y+2*y_direction)*window.Width] = true;
-}
-
-void set_line3(Window &window, size_t x, size_t y, Eposition position) 
-{
-	int h_position = (position & ( 1 << 0 )) >> 0 ? 1 : 0;
-	int v_position = (position & ( 1 << 1 )) >> 1 ? 1 : 0;
-
-	window.level[(x+0*h_position) + (y+0*v_position)*window.Width] = true;
-	window.level[(x+1*h_position) + (y+1*v_position)*window.Width] = true;
-	window.level[(x+2*h_position) + (y+2*v_position)*window.Width] = true;
 }
 
 int main(int argc, char const *argv[])
