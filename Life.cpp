@@ -67,7 +67,8 @@ std::vector<bool> calc_next_state(Window &window)
 			{
 				temp[col + row*window.Width] = true;
 			}
-			else {
+			else 
+			{
 				temp[col + row*window.Width] = false;
 			}
 		}		
@@ -96,8 +97,6 @@ int main(int argc, char const *argv[])
 
 		set_line3(window, 3, 10, Eposition::horisontal);
 		set_line3(window, 11, 3, Eposition::vertical);
-
-		
 	}
 
 	
