@@ -99,7 +99,7 @@ int main(int argc, char* args[])
 	            if (e.type == SDL_QUIT)
 	                quit = true;
 	        }
-			sdl_render(window, world);
+			sdl_draw_screen(window, world);
 			world.level = calc_next_state(world);
 		}
 	}

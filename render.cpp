@@ -29,7 +29,7 @@ bool sdl_init(gWindow &window, int w, int h)
 	return success;
 }
 
-bool sdl_render(gWindow &window, World &world)
+bool sdl_draw_screen(gWindow &window, World &world)
 {
 	bool success = true;
 
