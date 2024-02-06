@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <algorithm>
 #include <time.h> 
 #include <unistd.h>
@@ -6,44 +5,30 @@
 
 #include "structs.h"
 #include "patterns.h"
+#include "render.cpp"
 
-#define WindowHeight 20
-#define WindowWidth  50
-static size_t frame = 0;
+#define WindowHeight 200
+#define WindowWidth  300
+#define LevelScale 4
 
-void generate_units(size_t num, Window &window)
+void generate_units(size_t num, World &world)
 {
 	for (size_t i = 0; i < num; i++)
 	{
-		window.level[rand() % (window.Width*window.Height)] = true;
+		world.level[rand() % (world.Width*world.Height)] = true;
 	}
 }
 
-void draw_frame(Window &window)
-{
-	for (size_t row = 0; row < window.Height; row++)
-	{
-		for (size_t col = 0; col < window.Width; col++)
-		{
-			printf("%s", window.level[col + row*window.Width] ? "@" : " ");
-		}
-		printf("\n");
-	}
-	printf("Current frame is %zu", ++frame);
-	
-	printf("\033[%d;%dH", 0, 0);
-}
-
-std::vector<bool> calc_next_state(Window &window)
+std::vector<bool> calc_next_state(World &world)
 {
 	std::vector<bool> temp;
-	temp.resize(window.Width*window.Height, false);
+	temp.resize(world.Width*world.Height, false);
 
-	for (size_t row = 0; row < window.Height; row++)
+	for (size_t row = 0; row < world.Height; row++)
 	{
-		for (size_t col = 0; col < window.Width; col++)
+		for (size_t col = 0; col < world.Width; col++)
 		{
-			bool state = window.level[col + row*window.Width];
+			bool state = world.level[col + row*world.Width];
 			int neighbours = 0;
 			
 			for (int pos_y = -1; pos_y < 2; pos_y++)
@@ -52,9 +37,9 @@ std::vector<bool> calc_next_state(Window &window)
 				{
 					if (!(pos_x == 0 && pos_y == 0))
 					{
-						if(((row + pos_y) >= 0) && ((row + pos_y) < window.Height) && ((col + pos_x) >= 0) && ((col + pos_x) < window.Width))
+						if(((row + pos_y) >= 0) && ((row + pos_y) < world.Height) && ((col + pos_x) >= 0) && ((col + pos_x) < world.Width))
 						{
-							if(window.level[(col+pos_x) + (row+pos_y)*window.Width])
+							if(world.level[(col+pos_x) + (row+pos_y)*world.Width])
 							{
 								neighbours += 1;
 							}
@@ -65,11 +50,11 @@ std::vector<bool> calc_next_state(Window &window)
 
 			if ((neighbours == 3 && !state) || ((neighbours == 3 || neighbours == 2) && state))
 			{
-				temp[col + row*window.Width] = true;
+				temp[col + row*world.Width] = true;
 			}
 			else 
 			{
-				temp[col + row*window.Width] = false;
+				temp[col + row*world.Width] = false;
 			}
 		}		
 	}
@@ -79,33 +64,47 @@ std::vector<bool> calc_next_state(Window &window)
 	return temp;
 }
 
-int main(int argc, char const *argv[])
+int main(int argc, char* args[])
 {
 	srand(time(NULL));
-	Window window;
-	window.Width = WindowWidth;
-	window.Height = WindowHeight;
-	window.level.resize(window.Width*window.Height, false);
+	World world;
+	world.Width = WindowWidth;
+	world.Height = WindowHeight;
+	world.level.resize(world.Width*world.Height, false);
 
 	// // random generation
-	// generate_units(WindowWidth*WindowHeight/3, window);
+	// generate_units(WindowWidth*WindowHeight/3, world);
 
 	// setting patterns 
 	{
-		set_glider(window, 10, 10, EDirecton::down_right);
-		set_glider(window, 5, 7, EDirecton::upper_left);
+		set_glider(world, 10, 10, EDirecton::down_right);
+		set_glider(world, 5, 7, EDirecton::upper_left);
 
-		set_line3(window, 3, 10, Eposition::horisontal);
-		set_line3(window, 11, 3, Eposition::vertical);
+		set_line3(world, 3, 10, Eposition::horisontal);
+		set_line3(world, 11, 3, Eposition::vertical);
 	}
 
-	
-	while(true)
+	gWindow window;
+	window.scale = LevelScale;
+
+	if(sdl_init(window, WindowWidth*window.scale, WindowHeight*window.scale))
 	{
-		draw_frame(window);
-		window.level = calc_next_state(window);
-		usleep(1*1000000/30);	
+		bool quit = false;
+    	SDL_Event e;
+
+		while(!quit)
+		{
+			while (SDL_PollEvent(&e))
+	        {
+	            if (e.type == SDL_QUIT)
+	                quit = true;
+	        }
+			sdl_render(window, world);
+			world.level = calc_next_state(world);
+		}
 	}
+
+	sdl_finish(window);
 
 	return 0;
 }

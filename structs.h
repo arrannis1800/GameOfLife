@@ -1,11 +1,20 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
+#include <SDL.h>
 
-struct Window
+struct World
 {
 	std::vector<bool> level;
 	size_t Height;
 	size_t Width;
+};
+
+struct gWindow
+{
+	SDL_Window* window;
+	SDL_Surface* screenSurface;
+	SDL_Renderer* renderer;
+	int scale;
 };
 
 enum EDirecton
