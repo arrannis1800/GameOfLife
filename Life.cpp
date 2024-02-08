@@ -1,21 +1,23 @@
 #include <algorithm>
-#include <time.h> 
-#include <unistd.h>
 #include <vector>
+#include <random>
 
 #include "structs.h"
 #include "patterns.h"
 #include "render.cpp"
 
-#define WorldHeight 200
+#define WorldHeight 150
 #define WorldWidth  300
 #define LevelScale 4
 
 void generate_units(size_t num, World &world)
 {
+	std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<size_t> dis(0, world.Width * world.Height - 1);
 	for (size_t i = 0; i < num; i++)
 	{
-		world.level[rand() % (world.Width*world.Height)] = true;
+		world.level[dis(gen)] = true;
 	}
 }
 
@@ -66,11 +68,12 @@ std::vector<bool> calc_next_state(World &world)
 
 int main(int argc, char* args[])
 {
-	srand(time(NULL));
+
 	World world = World(WorldHeight, WorldWidth);
 
 	// // random generation
-	// generate_units(world.Width*world.Height/3, world);
+	// size_t num_units = world.Width*world.Height/3;
+	// generate_units(num_units, world);
 
 	// setting patterns 
 	{
