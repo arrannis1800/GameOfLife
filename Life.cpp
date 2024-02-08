@@ -7,8 +7,8 @@
 #include "patterns.h"
 #include "render.cpp"
 
-#define WindowHeight 200
-#define WindowWidth  300
+#define WorldHeight 200
+#define WorldWidth  300
 #define LevelScale 4
 
 void generate_units(size_t num, World &world)
@@ -67,13 +67,10 @@ std::vector<bool> calc_next_state(World &world)
 int main(int argc, char* args[])
 {
 	srand(time(NULL));
-	World world;
-	world.Width = WindowWidth;
-	world.Height = WindowHeight;
-	world.level.resize(world.Width*world.Height, false);
+	World world = World(WorldHeight, WorldWidth);
 
 	// // random generation
-	// generate_units(WindowWidth*WindowHeight/3, world);
+	// generate_units(world.Width*world.Height/3, world);
 
 	// setting patterns 
 	{
@@ -87,7 +84,7 @@ int main(int argc, char* args[])
 	gWindow window;
 	window.scale = LevelScale;
 
-	if(sdl_init(window, WindowWidth*window.scale, WindowHeight*window.scale))
+	if(sdl_init(window, world.Width*window.scale, world.Height*window.scale))
 	{
 		bool quit = false;
     	SDL_Event e;

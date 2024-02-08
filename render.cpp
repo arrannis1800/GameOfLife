@@ -29,6 +29,17 @@ bool sdl_init(gWindow &window, int w, int h)
 	return success;
 }
 
+void sdl_drawPixelScaled(size_t x, size_t y, int scale, SDL_Renderer *renderer)
+{
+	for(size_t rs = 0; rs < scale; rs++)
+	{
+		for(size_t cs = 0; cs < scale; cs++)
+		{
+			SDL_RenderDrawPoint(renderer, x*scale+cs, y*scale+rs);
+		}
+	}
+}
+
 bool sdl_draw_screen(gWindow &window, World &world)
 {
 	bool success = true;
@@ -51,14 +62,7 @@ bool sdl_draw_screen(gWindow &window, World &world)
     	{
     		if(world.level[col + row*world.Width])
 	    	{
-	    		for(size_t rs = 0; rs < window.scale; rs++)
-	    		{
-	    			for(size_t cs = 0; cs < window.scale; cs++)
-	    			{
-	    				SDL_RenderDrawPoint(window.renderer, col*window.scale+cs, row*window.scale+rs);
-	    			}
-	    		}
-	    		
+	    		sdl_drawPixelScaled(col, row, window.scale, window.renderer);
 	    	}
     	}
     }
