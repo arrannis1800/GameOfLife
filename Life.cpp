@@ -82,6 +82,10 @@ int main(int argc, char* args[])
 
 		set_line3(world, 3, 10, Eposition::horisontal);
 		set_line3(world, 11, 3, Eposition::vertical);
+
+
+		set_aircraft_carrier(world, 100, 30, EDirecton::down_right);
+		set_aircraft_carrier(world, 100, 50, EDirecton::upper_left);
 	}
 
 	gWindow window;
