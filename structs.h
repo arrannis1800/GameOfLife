@@ -20,9 +20,7 @@ struct World
 struct gWindow
 {
 	SDL_Window* window;
-	SDL_Surface* surfaceMessage;
 	TTF_Font* font;
-	SDL_Texture* message;
 	SDL_Renderer* renderer;
 	int scale;
 };
