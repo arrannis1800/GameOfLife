@@ -2,7 +2,7 @@
 #define PATTERNS_H
 #include "structs.h"
 
-void set_dot(World &world, size_t x, size_t y)
+void set_dot(World &world, int x, int y)
 {
 	if(x < world.Width && y < world.Height)
 	{
@@ -10,7 +10,7 @@ void set_dot(World &world, size_t x, size_t y)
 	}
 }
 
-void set_glider(World &world, size_t x, size_t y, EDirecton direction)
+void set_glider(World &world, int x, int y, EDirecton direction)
 {
 	int x_direction = (direction & ( 1 << 0 )) >> 0 ? 1 : -1;
 	int y_direction = (direction & ( 1 << 1 )) >> 1 ? 1 : -1;
@@ -22,7 +22,7 @@ void set_glider(World &world, size_t x, size_t y, EDirecton direction)
 	set_dot(world, x+2*x_direction, y+2*y_direction);
 }
 
-void set_aircraft_carrier(World &world, size_t x, size_t y, EDirecton direction)
+void set_aircraft_carrier(World &world, int x, int y, EDirecton direction)
 {
 	int x_direction = (direction & ( 1 << 0 )) >> 0 ? 1 : -1;
 	int y_direction = (direction & ( 1 << 1 )) >> 1 ? 1 : -1;
@@ -35,7 +35,7 @@ void set_aircraft_carrier(World &world, size_t x, size_t y, EDirecton direction)
 	set_dot(world, x+2*x_direction, y+2*y_direction);
 }
 
-void set_line3(World &world, size_t x, size_t y, Eposition position) 
+void set_line3(World &world, int x, int y, Eposition position) 
 {
 	int h_position = (position & ( 1 << 0 )) >> 0 ? 1 : 0;
 	int v_position = (position & ( 1 << 1 )) >> 1 ? 1 : 0;

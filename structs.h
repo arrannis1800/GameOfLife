@@ -1,14 +1,15 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 #include <SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 struct World
 {
 	std::vector<bool> level;
-	size_t Height;
-	size_t Width;
+	int Height;
+	int Width;
 
-	World(size_t h, size_t w)
+	World(int h, int w)
 	{
 		Height = h;
 		Width = w;
@@ -19,7 +20,9 @@ struct World
 struct gWindow
 {
 	SDL_Window* window;
-	SDL_Surface* screenSurface;
+	SDL_Surface* surfaceMessage;
+	TTF_Font* font;
+	SDL_Texture* message;
 	SDL_Renderer* renderer;
 	int scale;
 };

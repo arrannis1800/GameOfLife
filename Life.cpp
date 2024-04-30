@@ -26,9 +26,9 @@ std::vector<bool> calc_next_state(World &world)
 	std::vector<bool> temp;
 	temp.resize(world.Width*world.Height, false);
 
-	for (size_t row = 0; row < world.Height; row++)
+	for (int row = 0; row < world.Height; row++)
 	{
-		for (size_t col = 0; col < world.Width; col++)
+		for (int col = 0; col < world.Width; col++)
 		{
 			bool state = world.level[col + row*world.Width];
 			int neighbours = 0;
@@ -68,25 +68,26 @@ std::vector<bool> calc_next_state(World &world)
 
 int main(int argc, char* args[])
 {
-
+	(void)argc;
+	(void)args;
 	World world = World(WorldHeight, WorldWidth);
 
-	// // random generation
-	// size_t num_units = world.Width*world.Height/3;
-	// generate_units(num_units, world);
+	// random generation
+	size_t num_units = world.Width*world.Height/3;
+	generate_units(num_units, world);
 
-	// setting patterns 
-	{
-		set_glider(world, 10, 10, EDirecton::down_right);
-		set_glider(world, 5, 7, EDirecton::upper_left);
+	// // setting patterns 
+	// {
+	// 	set_glider(world, 10, 10, EDirecton::down_right);
+	// 	set_glider(world, 5, 7, EDirecton::upper_left);
 
-		set_line3(world, 3, 10, Eposition::horisontal);
-		set_line3(world, 11, 3, Eposition::vertical);
+	// 	set_line3(world, 3, 10, Eposition::horisontal);
+	// 	set_line3(world, 11, 3, Eposition::vertical);
 
 
-		set_aircraft_carrier(world, 100, 30, EDirecton::down_right);
-		set_aircraft_carrier(world, 100, 50, EDirecton::upper_left);
-	}
+	// 	set_aircraft_carrier(world, 100, 30, EDirecton::down_right);
+	// 	set_aircraft_carrier(world, 100, 50, EDirecton::upper_left);
+	// }
 
 	gWindow window;
 	window.scale = LevelScale;
