@@ -6,9 +6,9 @@
 #include "patterns.h"
 #include "render.cpp"
 
-#define WorldHeight 150
-#define WorldWidth  300
-#define LevelScale 4
+const int WorldHeight = 150;
+const int WorldWidth  = 300;
+const int LevelScale  = 4;
 
 void generate_units(size_t num, World &world)
 {
@@ -20,35 +20,41 @@ void generate_units(size_t num, World &world)
 		world.level[dis(gen)] = true;
 	}
 }
+int find_neighbours(World &world, int row, int col)
+{
+	int neighbours = 0;
+
+	for (int pos_y = -1; pos_y < 2; pos_y++)
+	{
+		for (int pos_x = -1; pos_x < 2; pos_x++)
+		{
+			if (pos_x == 0 && pos_y == 0)
+				continue;
+			
+			if(((row + pos_y) < 0) || ((row + pos_y) >= world.Height) || ((col + pos_x) < 0) || ((col + pos_x) >= world.Width))
+				continue;
+
+			if(world.level[(col+pos_x) + (row+pos_y)*world.Width])
+			{
+				neighbours += 1;
+			}
+		}
+	}
+
+	return neighbours;
+}
 
 std::vector<bool> calc_next_state(World &world)
 {
-	std::vector<bool> temp;
-	temp.resize(world.Width*world.Height, false);
+	std::vector<bool> temp = std::vector(world.Width*world.Height, false);
 
 	for (int row = 0; row < world.Height; row++)
 	{
 		for (int col = 0; col < world.Width; col++)
 		{
 			bool state = world.level[col + row*world.Width];
-			int neighbours = 0;
 			
-			for (int pos_y = -1; pos_y < 2; pos_y++)
-			{
-				for (int pos_x = -1; pos_x < 2; pos_x++)
-				{
-					if (!(pos_x == 0 && pos_y == 0))
-					{
-						if(((row + pos_y) >= 0) && ((row + pos_y) < world.Height) && ((col + pos_x) >= 0) && ((col + pos_x) < world.Width))
-						{
-							if(world.level[(col+pos_x) + (row+pos_y)*world.Width])
-							{
-								neighbours += 1;
-							}
-						}
-					}
-				}
-			}
+			int neighbours = find_neighbours(world, row, col);
 
 			if ((neighbours == 3 && !state) || ((neighbours == 3 || neighbours == 2) && state))
 			{
